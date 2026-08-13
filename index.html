@@ -368,7 +368,7 @@
       <div class="flex items-center space-x-3">
         <img src="image/lead_icon.png" alt="Logo LEAD" class="h-6 w-auto grayscale opacity-60 dark:opacity-40">
         <span class="text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wider">LEAD UNMSM &copy; 2026</span>
-        <span class="text-[9px] bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400 font-bold px-2 py-0.5 rounded-md border border-gray-200 dark:border-slate-700">v1.2.0</span>
+        <span class="text-[9px] bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400 font-bold px-2 py-0.5 rounded-md border border-gray-200 dark:border-slate-700">v1.3.0</span>
       </div>
 
       <!-- Añadido el origen de los datos de Meta -->
@@ -394,7 +394,9 @@
   <!-- Ventana del Chat (Oculta por defecto) -->
   <div id="ventana-chat-ia" class="fixed bottom-24 right-6 z-50 w-80 sm:w-96 hidden flex-col">
       <!-- Agregamos 'resize-y', 'min-h-[350px]' y 'max-h-[85vh]' para permitir estirar la ventana -->
-      <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-white/40 dark:border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[450px] min-h-[350px] max-h-[85vh] resize-y">
+      <div id="chat-contenedor" class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-white/40 dark:border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[450px] min-h-[350px] max-h-[85vh] relative">
+          
+          <div id="chat-resizer" class="absolute top-0 left-0 w-full h-3 cursor-n-resize z-50"></div>
           
           <div class="bg-gradient-to-r from-lead-purple to-lead-pink p-4 text-white flex justify-between items-center shadow-md">
               <div class="flex items-center gap-2">
@@ -1001,6 +1003,42 @@
     inputChat.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') enviarPreguntaIA(inputChat.value);
     });
+
+    // ==========================================
+    // LÓGICA DE REDIMENSIÓN HACIA ARRIBA
+    // ==========================================
+    const chatContenedor = document.getElementById('chat-contenedor');
+    const chatResizer = document.getElementById('chat-resizer');
+    
+    let isResizing = false;
+    let startY;
+    let startHeight;
+
+    chatResizer.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      startY = e.clientY;
+      startHeight = parseInt(window.getComputedStyle(chatContenedor).height, 10);
+      document.documentElement.style.cursor = 'n-resize';
+      document.documentElement.style.userSelect = 'none'; 
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      const newHeight = startHeight - (e.clientY - startY);
+      const maxH = window.innerHeight * 0.85; 
+      if (newHeight >= 350 && newHeight <= maxH) {
+        chatContenedor.style.height = newHeight + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        document.documentElement.style.cursor = '';
+        document.documentElement.style.userSelect = '';
+      }
+    });
+    
   </script>
 </body>
 </html>
