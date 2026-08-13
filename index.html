@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard LEAD UNMSM</title>
+  
+  <link rel="icon" type="image/png" href="image/lead_favicon.png">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class', // Habilitamos el modo oscuro por clase
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ['Inter', 'sans-serif'], 
+            display: ['Poppins', 'sans-serif']
+          },
+          colors: {
+            lead: { purple: '#8027AC', pink: '#EB427D', blue: '#03106A', dark: '#031346', white: '#FFFFFF' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwW6cqhmDeUY9qz3uoxgpEUJ3q9Y4hOKJHfzLnVehfDR9HtmBrGxTq5JSj1RTkWA_v_/exec";
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 antialiased overflow-x-hidden transition-colors duration-200">
+
+  <!-- BARRA DE NAVEGACIÓN -->
+  <header class="bg-lead-dark dark:bg-slate-950 text-white shadow-md sticky top-0 z-50 border-b border-transparent dark:border-slate-800 transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+
+        <div class="flex items-center space-x-3">
+          <img src="image/lead_icon.png" alt="Logo LEAD" class="h-8 w-auto object-contain">
+          <span class="font-bold font-display text-base sm:text-lg tracking-wide hidden sm:inline">Dashboard LEAD UNMSM</span>
+        </div>
+
+        <nav class="flex items-center space-x-1 sm:space-x-3">
+          <button onclick="cambiarVista('resultados')" id="btnResultados" class="bg-lead-purple text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-sm transition flex items-center space-x-2">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <span class="hidden md:inline">Resultados</span>
+          </button>
+
+          <button onclick="cambiarVista('contenido')" id="btnContenido" class="text-gray-300 hover:text-white px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition flex items-center space-x-2">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+            <span class="hidden md:inline">Contenido</span>
+          </button>
+
+          <button onclick="cambiarVista('publico')" id="btnPublico" class="text-gray-300 hover:text-white px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition flex items-center space-x-2">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <span class="hidden md:inline">Público</span>
+          </button>
+          
+          <div class="w-px h-6 bg-gray-600 mx-1"></div>
+          
+          <!-- Botón de Modo Oscuro -->
+          <button onclick="toggleDarkMode()" id="btnDarkMode" class="text-gray-300 hover:text-yellow-400 p-2 rounded-lg transition" title="Alternar Modo Oscuro">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+        </nav>
+
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <div id="pantallaCarga" class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-lead-purple"></div>
+      <span class="ml-3 text-lead-purple dark:text-purple-400 font-medium text-sm">Cargando datos del dashboard...</span>
+    </div>
+
+    <!-- ================= VISTA 1: RESULTADOS ================= -->
+    <section id="vistaResultados" class="hidden">
+      <div class="mb-6">
+        <h1 class="text-xl sm:text-2xl font-semibold font-display text-lead-dark dark:text-white">Resumen General</h1>
+        <p class="text-gray-500 dark:text-slate-400 text-xs sm:text-sm font-normal mt-1">Análisis de alcance, tráfico e impacto de la comunidad.</p>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 mb-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 transition-colors duration-200">
+        
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <span class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400 whitespace-nowrap">Rango de análisis:</span>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="aplicarFiltroRapido('resultados', 7)" class="text-[10px] sm:text-xs font-semibold text-lead-purple dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 px-3 py-1.5 rounded-md transition border border-purple-100 dark:border-purple-800/50">7 Días</button>
+            <button onclick="aplicarFiltroRapido('resultados', 30)" class="text-[10px] sm:text-xs font-semibold text-lead-purple dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 px-3 py-1.5 rounded-md transition border border-purple-100 dark:border-purple-800/50">30 Días</button>
+            <button onclick="aplicarFiltroRapido('resultados', 'mes')" class="text-[10px] sm:text-xs font-semibold text-lead-purple dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 px-3 py-1.5 rounded-md transition border border-purple-100 dark:border-purple-800/50">Mes Actual</button>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
+          <input type="date" id="fechaInicio" class="border border-gray-200 dark:border-slate-600 rounded-md p-2 text-xs sm:text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-slate-700 outline-none focus:border-lead-purple w-full sm:w-auto">
+          <span class="text-gray-400 dark:text-slate-500 text-xs text-center hidden sm:inline">hasta</span>
+          <input type="date" id="fechaFin" class="border border-gray-200 dark:border-slate-600 rounded-md p-2 text-xs sm:text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-slate-700 outline-none focus:border-lead-purple w-full sm:w-auto">
+
+          <div class="flex space-x-2 mt-1 sm:mt-0">
+            <button onclick="aplicarFiltro()" class="bg-lead-blue hover:bg-blue-900 text-white px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition shadow-sm flex-1 sm:flex-none">Filtrar</button>
+            <button onclick="limpiarFiltro()" class="text-gray-400 dark:text-slate-400 hover:text-lead-pink dark:hover:text-pink-400 px-2 py-2 text-xs sm:text-sm font-medium transition flex-1 sm:flex-none">Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4 mb-8">
+        <div class="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 border-l-4 border-l-lead-dark dark:border-l-slate-400 flex flex-col justify-between transition-colors duration-200">
+          <div class="flex justify-between items-start gap-2">
+            <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-slate-400 font-bold uppercase tracking-wider leading-tight">Alcance Total</p>
+            <div class="flex flex-col items-end flex-shrink-0">
+              <span id="deltaResAlcance" class="text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-gray-50 text-gray-400">-</span>
+              <span class="text-[7px] sm:text-[8px] text-gray-400 dark:text-slate-500 mt-1 uppercase font-semibold tracking-wide whitespace-nowrap">vs periodo ant.</span>
+            </div>
+          </div>
+          <p id="kpiAlcance" class="text-xl sm:text-2xl font-semibold font-display text-lead-dark dark:text-white mt-2">0</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 border-l-4 border-l-lead-blue dark:border-l-blue-400 flex flex-col justify-between transition-colors duration-200">
+          <div class="flex justify-between items-start gap-2">
+            <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-slate-400 font-semibold uppercase tracking-wider leading-tight">Visualizaciones</p>
+            <div class="flex flex-col items-end flex-shrink-0">
+              <span id="deltaResVistas" class="text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-gray-50 text-gray-400">-</span>
+              <span class="text-[7px] sm:text-[8px] text-gray-400 dark:text-slate-500 mt-1 uppercase font-semibold tracking-wide whitespace-nowrap">vs periodo ant.</span>
+            </div>
+          </div>
+          <p id="kpiVistas" class="text-xl sm:text-2xl font-semibold font-display text-lead-blue dark:text-blue-400 mt-1">0</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 border-l-4 border-l-lead-purple dark:border-l-purple-400 flex flex-col justify-between transition-colors duration-200">
+          <div class="flex justify-between items-start gap-2">
+            <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-slate-400 font-semibold uppercase tracking-wider leading-tight">Interacciones</p>
+            <div class="flex flex-col items-end flex-shrink-0">
+              <span id="deltaResInt" class="text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-gray-50 text-gray-400">-</span>
+              <span class="text-[7px] sm:text-[8px] text-gray-400 dark:text-slate-500 mt-1 uppercase font-semibold tracking-wide whitespace-nowrap">vs periodo ant.</span>
+            </div>
+          </div>
+          <p id="kpiInteracciones" class="text-xl sm:text-2xl font-semibold font-display text-lead-purple dark:text-purple-400 mt-1">0</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 border-l-4 border-l-lead-pink dark:border-l-pink-400 flex flex-col justify-between transition-colors duration-200">
+          <div class="flex justify-between items-start gap-2">
+            <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-slate-400 font-semibold uppercase tracking-wider leading-tight">Engagement Rate</p>
+            <div class="flex flex-col items-end flex-shrink-0">
+              <span id="deltaResER" class="text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-gray-50 text-gray-400">-</span>
+              <span class="text-[7px] sm:text-[8px] text-gray-400 dark:text-slate-500 mt-1 uppercase font-semibold tracking-wide whitespace-nowrap">vs periodo ant.</span>
+            </div>
+          </div>
+          <p id="kpiER" class="text-xl sm:text-2xl font-semibold font-display text-lead-pink dark:text-pink-400 mt-1">0%</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 border-l-4 border-l-lead-purple dark:border-l-purple-400 flex flex-col justify-between col-span-2 md:col-span-1 transition-colors duration-200">
+          <div class="flex justify-between items-start gap-2">
+            <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-slate-400 font-semibold uppercase tracking-wider leading-tight">Seguidores</p>
+            <div class="flex flex-col items-end flex-shrink-0">
+              <span id="deltaResSeg" class="text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-gray-50 text-gray-400">-</span>
+              <span class="text-[7px] sm:text-[8px] text-gray-400 dark:text-slate-500 mt-1 uppercase font-semibold tracking-wide whitespace-nowrap">vs periodo ant.</span>
+            </div>
+          </div>
+          <p id="kpiSeguidores" class="text-xl sm:text-2xl font-semibold font-display text-lead-purple dark:text-purple-400 mt-1">0</p>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 mb-6 transition-colors duration-200">
+        <h2 class="text-sm sm:text-base font-semibold font-display text-lead-dark dark:text-white mb-4">Evolución Diaria (Alcance vs Interacciones)</h2>
+        <div class="relative h-64 sm:h-72 w-full">
+          <canvas id="graficoResultados"></canvas>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors duration-200">
+          <h2 class="text-sm font-semibold font-display text-lead-dark dark:text-white mb-1">Embudo de Conversión</h2>
+          <p class="text-xs text-gray-400 dark:text-slate-400 mb-4">De visualización a seguidor</p>
+          <div class="relative h-56 w-full"><canvas id="graficoEmbudo"></canvas></div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors duration-200">
+          <h2 class="text-sm font-semibold font-display text-lead-dark dark:text-white mb-1">Tráfico al Perfil</h2>
+          <p class="text-xs text-gray-400 dark:text-slate-400 mb-4">Visitas diarias al perfil</p>
+          <div class="relative h-56 w-full"><canvas id="graficoTrafico"></canvas></div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors duration-200">
+          <h2 class="text-sm font-semibold font-display text-lead-dark dark:text-white mb-1">Comunidad Ganada</h2>
+          <p class="text-xs text-gray-400 dark:text-slate-400 mb-4">Crecimiento acumulado</p>
+          <div class="relative h-56 w-full"><canvas id="graficoSeguidores"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VISTA 2: CONTENIDO ================= -->
+    <section id="vistaContenido" class="hidden">
+
+      <div class="mb-6">
+        <h1 class="text-xl sm:text-2xl font-semibold font-display text-lead-dark dark:text-white">Análisis de Contenido</h1>
+        <p class="text-gray-500 dark:text-slate-400 text-xs sm:text-sm font-normal mt-1">Análisis de rendimiento por tipo de publicación e impacto.</p>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 mb-6 flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 transition-colors duration-200">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs sm:text-sm font-medium text-gray-500 dark:text-slate-400 whitespace-nowrap">Rango:</span>
+            <select id="filtroTipo" class="border border-gray-200 dark:border-slate-600 rounded-md p-2 text-xs sm:text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-slate-700 outline-none focus:border-lead-purple w-32 sm:w-40">
+              <option value="Todos">Todos los Formatos</option>
+            </select>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-2 sm:mt-0">
+            <button onclick="aplicarFiltroRapido('contenido', 7)" class="text-[10px] sm:text-xs font-semibold text-lead-purple dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 px-3 py-1.5 rounded-md transition border border-purple-100 dark:border-purple-800/50">7 Días</button>
+            <button onclick="aplicarFiltroRapido('contenido', 30)" class="text-[10px] sm:text-xs font-semibold text-lead-purple dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 px-3 py-1.5 rounded-md transition border border-purple-100 dark:border-purple-800/50">30 Días</button>
+            <button onclick="aplicarFiltroRapido('contenido', 'mes')" class="text-[10px] sm:text-xs font-semibold text-lead-purple dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 px-3 py-1.5 rounded-md transition border border-purple-100 dark:border-purple-800/50">Mes Actual</button>
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full xl:w-auto">
+          <input type="date" id="contFechaInicio" class="border border-gray-200 dark:border-slate-600 rounded-md p-2 text-xs sm:text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-slate-700 outline-none focus:border-lead-purple w-full sm:w-auto">
+          <span class="text-gray-400 dark:text-slate-500 text-xs text-center hidden sm:inline">hasta</span>
+          <input type="date" id="contFechaFin" class="border border-gray-200 dark:border-slate-600 rounded-md p-2 text-xs sm:text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-slate-700 outline-none focus:border-lead-purple w-full sm:w-auto">
+
+          <div class="flex space-x-2 mt-1 sm:mt-0">
+            <button onclick="aplicarFiltrosContenido()" class="bg-lead-blue hover:bg-blue-900 text-white px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition shadow-sm flex-1 sm:flex-none">Filtrar</button>
+            <button onclick="limpiarFiltrosContenido()" class="text-gray-400 dark:text-slate-400 hover:text-lead-pink dark:hover:text-pink-400 px-3 py-2 text-xs sm:text-sm font-medium transition flex-1 sm:flex-none">Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 mb-6">
+        <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 border-l-4 border-l-lead-dark dark:border-l-slate-400 flex flex-col justify-between transition-colors duration-200">
+          <div class="flex justify-between items-start gap-2">
+            <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-slate-400 font-bold uppercase tracking-wider leading-tight">Alcance Total</p>
+            <div class="flex flex-col items-end flex-shrink-0">
+              <span id="deltaAlcance" class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md bg-gray-50 text-gray-400" title="vs Periodo Anterior">-</span>
+              <span class="text-[7px] sm:text-[8px] text-gray-400 dark:text-slate-500 mt-1 uppercase font-semibold tracking-wide whitespace-nowrap">vs periodo ant.</span>
+            </div>
+          </div>
+          <p id="contKpiAlcance" class="text-2xl sm:text-3xl font-semibold font-display text-lead-dark dark:text-white mt-2">0</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 border-l-4 border-l-lead-purple dark:border-l-purple-400 flex flex-col justify-between transition-colors duration-200">
+          <div class="flex justify-between items-start gap-2">
+            <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-slate-400 font-bold uppercase tracking-wider leading-tight">Interacciones Totales</p>
+            <div class="flex flex-col items-end flex-shrink-0">
+              <span id="deltaInteracciones" class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md bg-gray-50 text-gray-400" title="vs Periodo Anterior">-</span>
+              <span class="text-[7px] sm:text-[8px] text-gray-400 dark:text-slate-500 mt-1 uppercase font-semibold tracking-wide whitespace-nowrap">vs periodo ant.</span>
+            </div>
+          </div>
+          <p id="contKpiInteracciones" class="text-2xl sm:text-3xl font-semibold font-display text-lead-purple dark:text-purple-400 mt-2">0</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 border-l-4 border-l-lead-pink dark:border-l-pink-400 flex flex-col justify-between transition-colors duration-200">
+          <div class="flex justify-between items-start gap-2">
+            <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-slate-400 font-bold uppercase tracking-wider leading-tight">Engagement Rate Promedio</p>
+            <div class="flex flex-col items-end flex-shrink-0">
+              <span id="deltaER" class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md bg-gray-50 text-gray-400" title="vs Periodo Anterior">-</span>
+              <span class="text-[7px] sm:text-[8px] text-gray-400 dark:text-slate-500 mt-1 uppercase font-semibold tracking-wide whitespace-nowrap">vs periodo ant.</span>
+            </div>
+          </div>
+          <p id="contKpiER" class="text-2xl sm:text-3xl font-semibold font-display text-lead-pink dark:text-pink-400 mt-2">0%</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 lg:col-span-2 flex flex-col justify-between transition-colors duration-200">
+          <div>
+            <h2 class="text-sm sm:text-base font-semibold font-display text-lead-dark dark:text-white mb-1">Matriz de Impacto</h2>
+            <p class="text-xs text-gray-400 dark:text-slate-400 mb-4">Color = Formato | Tamaño de burbuja = Engagement Rate (ER)</p>
+          </div>
+          <div class="relative h-72 sm:h-80 w-full"><canvas id="graficoMatrizImpacto"></canvas></div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 flex flex-col transition-colors duration-200">
+          <h2 class="text-sm sm:text-base font-semibold font-display text-lead-dark dark:text-white mb-1">Top 3 Más Virales</h2>
+          <p class="text-xs text-gray-400 dark:text-slate-400 mb-4">Publicaciones con mayor alcance</p>
+          <div id="topPodiumVertical" class="flex flex-col space-y-3 flex-grow justify-around"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors duration-200">
+          <h2 class="text-sm sm:text-base font-semibold font-display text-lead-dark dark:text-white mb-1">Alcance Promedio por Formato</h2>
+          <div class="relative h-60 sm:h-64 w-full"><canvas id="graficoFormatoHorizontal"></canvas></div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors duration-200">
+          <h2 class="text-sm sm:text-base font-semibold font-display text-lead-dark dark:text-white mb-1">Cruce: Visualizaciones vs Interacciones</h2>
+          <div class="relative h-60 sm:h-64 w-full"><canvas id="graficoCruceVistas"></canvas></div>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden mb-8 transition-colors duration-200">
+        <div class="p-4 sm:p-5 border-b border-gray-100 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <h2 class="text-sm sm:text-base font-semibold font-display text-lead-dark dark:text-white">Detalle de Publicaciones</h2>
+            <p id="subInfoTabla" class="text-xs text-gray-400 dark:text-slate-400 mt-0.5">Haz clic en los encabezados para ordenar</p>
+          </div>
+          <span id="contadorPosts" class="text-xs bg-gray-50 dark:bg-slate-700 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-full font-medium border border-gray-100 dark:border-slate-600">0 posts</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse min-w-[700px]">
+            <thead>
+              <tr class="bg-gray-50 dark:bg-slate-700/50 text-gray-400 dark:text-slate-400 text-[11px] font-semibold uppercase tracking-wider border-b border-gray-100 dark:border-slate-700">
+                <th class="p-3 sm:p-4 cursor-pointer hover:text-lead-purple transition" onclick="ordenarTabla('descripcion')">Descripción / Copy ↕</th>
+                <th class="p-3 sm:p-4 cursor-pointer hover:text-lead-purple transition" onclick="ordenarTabla('fecha')">Fecha ↕</th>
+                <th class="p-3 sm:p-4 cursor-pointer hover:text-lead-purple transition" onclick="ordenarTabla('tipo')">Tipo ↕</th>
+                <th class="p-3 sm:p-4 cursor-pointer hover:text-lead-purple transition" onclick="ordenarTabla('alcance')">Alcance ↕</th>
+                <th class="p-3 sm:p-4 cursor-pointer hover:text-lead-purple transition text-center" onclick="ordenarTabla('likes')" title="Me gusta">
+                  <div class="flex items-center justify-center gap-1">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    <span class="text-[10px]">↕</span>
+                  </div>
+                </th>
+                <th class="p-3 sm:p-4 cursor-pointer hover:text-lead-purple transition text-center" onclick="ordenarTabla('comentarios')" title="Comentarios">
+                  <div class="flex items-center justify-center gap-1">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    <span class="text-[10px]">↕</span>
+                  </div>
+                </th>
+                <th class="p-3 sm:p-4 cursor-pointer hover:text-lead-purple transition text-center" onclick="ordenarTabla('compartidos')" title="Compartidos">
+                  <div class="flex items-center justify-center gap-1">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                    <span class="text-[10px]">↕</span>
+                  </div>
+                </th>
+                <th class="p-3 sm:p-4 cursor-pointer hover:text-lead-purple transition text-center" onclick="ordenarTabla('guardados')" title="Guardados">
+                  <div class="flex items-center justify-center gap-1">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                    <span class="text-[10px]">↕</span>
+                  </div>
+                </th>
+                <th class="p-3 sm:p-4 cursor-pointer hover:text-lead-purple transition text-center" onclick="ordenarTabla('seguimientos')" title="Seguimientos">
+                  <div class="flex items-center justify-center gap-1">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    <span class="text-[10px]">↕</span>
+                  </div>
+                </th>
+                <th class="p-3 sm:p-4 cursor-pointer hover:text-lead-purple transition text-center" onclick="ordenarTabla('er')">ER ↕</th>
+              </tr>
+            </thead>
+            <tbody id="tablaContenidoBody" class="text-xs text-gray-700 dark:text-gray-300 divide-y divide-gray-100 dark:divide-slate-700/50"></tbody>
+          </table>
+        </div>
+        <div id="contenedorBotonVerMas" class="p-4 bg-gray-50 dark:bg-slate-800 text-center border-t border-gray-100 dark:border-slate-700 hidden">
+          <button onclick="toggleVerTodo()" id="btnVerMas" class="text-lead-purple dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-300 text-xs font-semibold transition">
+            Ver todas las publicaciones ↓
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VISTA 3: PÚBLICO ================= -->
+    <section id="vistaPublico" class="hidden">
+      <div class="mb-6">
+        <h1 class="text-2xl font-semibold font-display text-lead-dark dark:text-white">Demografía y Comunidad</h1>
+        <p class="text-gray-500 dark:text-slate-400 text-sm font-normal mt-1">Análisis de audiencia, distribución geográfica y afinidad.</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors duration-200"><h2 class="text-sm font-semibold font-display text-lead-dark dark:text-white mb-1">Principales Países</h2><div class="relative h-64 w-full"><canvas id="graficoPaises"></canvas></div></div>
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors duration-200"><h2 class="text-sm font-semibold font-display text-lead-dark dark:text-white mb-1">Principales Ciudades</h2><div class="relative h-64 w-full"><canvas id="graficoCiudades"></canvas></div></div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors duration-200"><h2 class="text-sm font-semibold font-display text-lead-dark dark:text-white mb-1">Rango de Edad y Sexo</h2><div class="relative h-64 w-full"><canvas id="graficoEdadSexo"></canvas></div></div>
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 transition-colors duration-200"><h2 class="text-sm font-semibold font-display text-lead-dark dark:text-white mb-1">Páginas Afines</h2><div class="relative h-64 w-full"><canvas id="graficoPaginas"></canvas></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 mt-4 py-6 transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      
+      <div class="flex items-center space-x-3">
+        <img src="image/lead_icon.png" alt="Logo LEAD" class="h-6 w-auto grayscale opacity-60 dark:opacity-40">
+        <span class="text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wider">LEAD UNMSM &copy; 2026</span>
+        <span class="text-[9px] bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400 font-bold px-2 py-0.5 rounded-md border border-gray-200 dark:border-slate-700">v1.2.0</span>
+      </div>
+
+      <!-- Añadido el origen de los datos de Meta -->
+      <p class="text-[10px] text-gray-400 dark:text-slate-500 font-medium text-center md:text-right">
+        Datos obtenidos de Meta Business Suite.<br>
+        by oscar :>
+      </p>
+      
+    </div>
+  </footer>
+
+  <script>
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+      let isDark = document.documentElement.classList.contains('dark');
+      Chart.defaults.color = isDark ? '#94a3b8' : '#6b7280';
+      [chartResultados, chartTrafico, chartSeguidores, chartEmbudo, chartMatriz, chartFormatoHorizontal, chartCruceVistas, chartPaises, chartCiudades, chartEdadSexo, chartPaginas].forEach(c => {
+        if (c) c.update();
+      });
+    }
+
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = '#6b7280'; // Color por defecto (claro)
+
+    let datosResultados = [];
+    let cacheContenidoCruces = [];
+    let datosPublicoCache = { paises: [], ciudades: [], edadSexo: [], paginas: [] };
+
+    let chartResultados, chartTrafico, chartSeguidores, chartEmbudo;
+
+    window.onload = function() {
+      fetch(APPS_SCRIPT_URL + '?action=getData')
+        .then(r => r.json())
+        .then(data => {
+          datosResultados = data.resultados || [];
+          cacheContenidoCruces = data.contenido || [];
+          datosPublicoCache = data.publico || { paises: [], ciudades: [], edadSexo: [], paginas: [] };
+
+          if (datosResultados.length > 0) {
+            document.getElementById('fechaInicio').value = datosResultados[0].Fecha;
+            document.getElementById('fechaFin').value = datosResultados[datosResultados.length - 1].Fecha;
+          }
+
+          document.getElementById('pantallaCarga').classList.add('hidden');
+          document.getElementById('vistaResultados').classList.remove('hidden');
+          actualizarDashboardResultados(datosResultados);
+        })
+        .catch(err => {
+          document.getElementById('pantallaCarga').innerHTML =
+            `<p class="text-lead-pink font-semibold text-sm">❌ Error cargando datos: ${err.message}<br><span class="text-gray-400 text-xs">Revisa que APPS_SCRIPT_URL esté bien configurada y que el despliegue sea público.</span></p>`;
+        });
+    };
+
+    function cambiarVista(vista) {
+      ['Resultados', 'Contenido', 'Publico'].forEach(v => {
+        document.getElementById(`vista${v}`).classList.add('hidden');
+        document.getElementById(`btn${v}`).className = "text-gray-300 hover:text-white px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition flex items-center space-x-2";
+      });
+      document.getElementById(`vista${vista.charAt(0).toUpperCase() + vista.slice(1)}`).classList.remove('hidden');
+      document.getElementById(`btn${vista.charAt(0).toUpperCase() + vista.slice(1)}`).className = "bg-lead-purple text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-sm transition flex items-center space-x-2";
+
+      if (vista === 'contenido') cargarVistaContenidoOnce();
+      if (vista === 'publico') cargarVistaPublicoOnce();
+    }
+
+    function aplicarFiltro() {
+      const i = document.getElementById('fechaInicio').value, f = document.getElementById('fechaFin').value;
+      if (i && f) actualizarDashboardResultados(datosResultados.filter(d => d.Fecha >= i && d.Fecha <= f));
+    }
+
+    function limpiarFiltro() {
+      if (datosResultados.length > 0) {
+        document.getElementById('fechaInicio').value = datosResultados[0].Fecha;
+        document.getElementById('fechaFin').value = datosResultados[datosResultados.length - 1].Fecha;
+      }
+      actualizarDashboardResultados(datosResultados);
+    }
+
+    function calcularEstilosPoP(actual, anterior) {
+      if (anterior === 0 && actual === 0) return { texto: '-', clase: 'bg-gray-50 dark:bg-slate-700 text-gray-400' };
+      if (anterior === 0) return { texto: 'N/A', clase: 'bg-gray-50 dark:bg-slate-700 text-gray-400' };
+      let variacion = ((actual - anterior) / anterior) * 100;
+      let texto = (variacion > 0 ? '▲ +' : '▼ ') + variacion.toFixed(1) + '%';
+      let clase = variacion > 0 ? 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800/50' : 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 border border-red-100 dark:border-red-800/50';
+      return { texto, clase };
+    }
+
+    function aplicarDelta(id, actual, previo) {
+      let delta = calcularEstilosPoP(actual, previo);
+      let el = document.getElementById(id);
+      el.innerText = delta.texto;
+      el.className = `text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md transition-colors duration-200 ${delta.clase}`;
+    }
+
+    function actualizarDashboardResultados(datos) {
+      if (chartResultados) [chartResultados, chartTrafico, chartSeguidores, chartEmbudo].forEach(c => c.destroy());
+
+      const fechas = datos.map(f => f.Fecha);
+      const alc = datos.map(f => f.Alcance || 0);
+      const int = datos.map(f => f.Interacciones || 0);
+      const vis = datos.map(f => f.Visualizaciones || 0);
+      const seg = datos.map(f => f.Seguidores || 0);
+      const vst = datos.map(f => f.Visitas || 0);
+
+      let ac = 0; const segAc = seg.map(v => { ac += v; return ac; });
+      const tAlc = alc.reduce((a, b) => a + b, 0), tVis = vis.reduce((a, b) => a + b, 0), tInt = int.reduce((a, b) => a + b, 0), tSeg = seg.reduce((a, b) => a + b, 0), tVst = vst.reduce((a, b) => a + b, 0);
+      const currentER = tAlc > 0 ? (tInt / tAlc) * 100 : 0;
+
+      let inicioStr = document.getElementById('fechaInicio').value;
+      let finStr = document.getElementById('fechaFin').value;
+      let tAlcPrev = 0, tVisPrev = 0, tIntPrev = 0, tSegPrev = 0, prevER = 0;
+
+      if (inicioStr && finStr) {
+        let dIni = new Date(inicioStr + "T00:00:00");
+        let dFin = new Date(finStr + "T00:00:00");
+        let diffDays = Math.ceil(Math.abs(dFin - dIni) / (1000 * 3600 * 24)) + 1;
+
+        let prevFin = new Date(dIni);
+        prevFin.setDate(prevFin.getDate() - 1);
+        let prevIni = new Date(prevFin);
+        prevIni.setDate(prevIni.getDate() - diffDays + 1);
+
+        let strPrevIni = prevIni.toISOString().split('T')[0];
+        let strPrevFin = prevFin.toISOString().split('T')[0];
+
+        let datosPrev = datosResultados.filter(d => d.Fecha >= strPrevIni && d.Fecha <= strPrevFin);
+
+        tAlcPrev = datosPrev.reduce((a, b) => a + (b.Alcance || 0), 0);
+        tVisPrev = datosPrev.reduce((a, b) => a + (b.Visualizaciones || 0), 0);
+        tIntPrev = datosPrev.reduce((a, b) => a + (b.Interacciones || 0), 0);
+        tSegPrev = datosPrev.reduce((a, b) => a + (b.Seguidores || 0), 0);
+        prevER = tAlcPrev > 0 ? (tIntPrev / tAlcPrev) * 100 : 0;
+      }
+
+      document.getElementById('kpiAlcance').innerText = tAlc.toLocaleString('en-US');
+      aplicarDelta('deltaResAlcance', tAlc, tAlcPrev);
+
+      document.getElementById('kpiVistas').innerText = tVis.toLocaleString('en-US');
+      aplicarDelta('deltaResVistas', tVis, tVisPrev);
+
+      document.getElementById('kpiInteracciones').innerText = tInt.toLocaleString('en-US');
+      aplicarDelta('deltaResInt', tInt, tIntPrev);
+
+      document.getElementById('kpiER').innerText = currentER.toFixed(2) + '%';
+      aplicarDelta('deltaResER', currentER, prevER);
+
+      document.getElementById('kpiSeguidores').innerText = tSeg.toLocaleString('en-US');
+      aplicarDelta('deltaResSeg', tSeg, tSegPrev);
+
+      chartResultados = new Chart(document.getElementById('graficoResultados').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: fechas,
+          datasets: [
+            { label: 'Alcance', data: alc, borderColor: '#8027AC', backgroundColor: 'rgba(128, 39, 172, 0.1)', borderWidth: 2, tension: 0.4, fill: true, pointRadius: 4, pointHoverRadius: 6, yAxisID: 'y' },
+            { label: 'Interacciones', data: int, borderColor: '#EB427D', borderWidth: 2, borderDash: [4, 4], tension: 0.4, pointRadius: 4, pointHoverRadius: 6, yAxisID: 'y1' }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          events: ['mousemove', 'mouseout', 'touchstart', 'click'], // Mouseout agregado para PC
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+              backgroundColor: '#031346',
+              titleFont: { family: 'Poppins', size: 13, weight: 'bold' },
+              bodyFont: { family: 'Inter', size: 12 },
+              padding: 12,
+              animation: { duration: 150 },
+              callbacks: {
+                afterBody: function(context) {
+                  try {
+                    let fechaHover = String(context[0].label).trim();
+                    let postsDelDia = cacheContenidoCruces.filter(p => {
+                      for (let key in p) {
+                        if (key.toLowerCase().includes('fecha')) {
+                          let fechaPub = String(p[key]).trim();
+                          if (fechaPub === fechaHover || fechaPub.startsWith(fechaHover)) return true;
+                        }
+                      }
+                      return false;
+                    });
+
+                    if (postsDelDia.length > 0) {
+                      let lineas = ['', '🔥 PUBLICADO ESTE DÍA:'];
+                      postsDelDia.forEach(p => {
+                        let tipo = "Post";
+                        let desc = "";
+                        for (let key in p) {
+                          if (key.toLowerCase().includes('tipo')) tipo = String(p[key]).trim();
+                          if (key.toLowerCase().includes('descrip') || key.toLowerCase().includes('copy')) {
+                            desc = String(p[key]).replace(/[\r\n]+/g, " ");
+                          }
+                        }
+                        if (desc.length > 50) desc = desc.substring(0, 47) + '...';
+                        lineas.push(`• [${tipo}] ${desc}`);
+                      });
+                      return lineas;
+                    }
+                  } catch(e) { console.error("Error en tooltip: ", e); }
+                  return null;
+                }
+              }
+            }
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: { position: 'left', grid: { color: context => document.documentElement.classList.contains('dark') ? '#334155' : '#f3f4f6' } },
+            y1: { position: 'right', grid: { drawOnChartArea: false } }
+          }
+        }
+      });
+
+      chartEmbudo = new Chart(document.getElementById('graficoEmbudo').getContext('2d'), { type: 'bar', data: { labels: ['Vistas', 'Alcance', 'Visitas', 'Segs'], datasets: [{ data: [tVis, tAlc, tVst, tSeg], backgroundColor: ['#03106A', '#8027AC', '#EB427D', '#8027AC'], borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } } });
+      chartTrafico = new Chart(document.getElementById('graficoTrafico').getContext('2d'), { type: 'bar', data: { labels: fechas, datasets: [{ data: vst, backgroundColor: '#03106A', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } } });
+      chartSeguidores = new Chart(document.getElementById('graficoSeguidores').getContext('2d'), { type: 'line', data: { labels: fechas, datasets: [{ data: segAc, borderColor: '#8027AC', backgroundColor: 'rgba(128, 39, 172, 0.15)', borderWidth: 2, tension: 0.4, fill: true, pointRadius: 2, pointBackgroundColor: '#8027AC' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } } });
+    }
+
+    function ocultarTooltipsEnMovil() {
+      [chartResultados, chartTrafico, chartSeguidores, chartEmbudo, chartMatriz, chartFormatoHorizontal, chartCruceVistas].forEach(chart => {
+        if (chart && chart.tooltip) {
+          chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+          chart.update();
+        }
+      });
+    }
+
+    window.addEventListener('scroll', ocultarTooltipsEnMovil, { passive: true });
+    document.addEventListener('touchstart', function(e) {
+      if (!e.target.closest('canvas')) {
+        ocultarTooltipsEnMovil();
+      }
+    }, { passive: true });
+
+    function obtenerFechaLocalISO(fechaObj) {
+      const offset = fechaObj.getTimezoneOffset() * 60000;
+      return new Date(fechaObj.getTime() - offset).toISOString().split('T')[0];
+    }
+
+    function aplicarFiltroRapido(vista, tipo) {
+      let hoy = new Date();
+      let fechaFin = obtenerFechaLocalISO(hoy);
+      let fechaInicio = "";
+
+      if (tipo === 7) {
+        let inicio = new Date();
+        inicio.setDate(inicio.getDate() - 7);
+        fechaInicio = obtenerFechaLocalISO(inicio);
+      } else if (tipo === 30) {
+        let inicio = new Date();
+        inicio.setDate(inicio.getDate() - 30);
+        fechaInicio = obtenerFechaLocalISO(inicio);
+      } else if (tipo === 'mes') {
+        let inicio = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+        fechaInicio = obtenerFechaLocalISO(inicio);
+      }
+
+      if (vista === 'resultados') {
+        document.getElementById('fechaInicio').value = fechaInicio;
+        document.getElementById('fechaFin').value = fechaFin;
+        aplicarFiltro();
+      } else if (vista === 'contenido') {
+        document.getElementById('contFechaInicio').value = fechaInicio;
+        document.getElementById('contFechaFin').value = fechaFin;
+        aplicarFiltrosContenido();
+      }
+    }
+
+    // ============================================================
+    // VISTA CONTENIDO Y TABLA ORDENABLE
+    // ============================================================
+    let contenidoCargado = false, datosContenidoGlobal = [], datosContenidoFiltrados = [], chartMatriz, chartFormatoHorizontal, chartCruceVistas, mostrandoTodo = false;
+    
+    let ordenColumna = 'fecha';
+    let ordenAscendente = false;
+
+    function cargarVistaContenidoOnce() {
+      if (contenidoCargado) return; contenidoCargado = true;
+
+      datosContenidoGlobal = cacheContenidoCruces.map(d => {
+        let likes = Number(d["Me Gusta"]||0);
+        let com = Number(d["Comentarios"]||0);
+        let comp = Number(d["Compartidos"]||0);
+        let guard = Number(d["Guardados"]||0);
+        let seg = Number(d["Seguimiento"]||d["Seguimientos"]||0);
+
+        let int = likes + com + comp + guard;
+        let alc = Number(d["Alcance"]||0);
+        return {
+          fecha: d["Fecha Publicación"] || "", fechaDisplay: d["Fecha Publicación_Display"] || "",
+          tipo: d["Tipo"] || "Post", descripcion: d["Descripción / Copy"] || "Sin descripción", link: d["Link"] || "#",
+          alcance: alc, visualizaciones: Number(d["Visualizaciones"]||0), interacciones: int,
+          likes: likes, comentarios: com, compartidos: comp, guardados: guard, seguimientos: seg,
+          er: alc > 0 ? (int / alc) * 100 : 0
+        };
+      });
+      datosContenidoGlobal.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+      datosContenidoFiltrados = [...datosContenidoGlobal];
+
+      const st = document.getElementById('filtroTipo'); st.innerHTML = '<option value="Todos">Todos los Formatos</option>';
+      [...new Set(datosContenidoGlobal.map(d => d.tipo))].forEach(t => { let opt = document.createElement('option'); opt.value = t; opt.innerText = t; st.appendChild(opt); });
+
+      if (datosContenidoGlobal.length > 0) {
+        document.getElementById('contFechaInicio').value = datosContenidoGlobal[datosContenidoGlobal.length - 1].fecha;
+        document.getElementById('contFechaFin').value = datosContenidoGlobal[0].fecha;
+      }
+      renderizarVistaContenido(datosContenidoFiltrados);
+    }
+
+    function aplicarFiltrosContenido() {
+      const t = document.getElementById('filtroTipo').value, i = document.getElementById('contFechaInicio').value, f = document.getElementById('contFechaFin').value;
+      datosContenidoFiltrados = datosContenidoGlobal.filter(d => (t === 'Todos' || d.tipo === t) && (!i || !f || (d.fecha >= i && d.fecha <= f)));
+      
+      // Mantenemos el orden activo al filtrar
+      ordenarTabla(ordenColumna, true); 
+      renderizarVistaContenido(datosContenidoFiltrados);
+    }
+
+    function limpiarFiltrosContenido() {
+      document.getElementById('filtroTipo').value = 'Todos';
+      if (datosContenidoGlobal.length > 0) { document.getElementById('contFechaInicio').value = datosContenidoGlobal[datosContenidoGlobal.length - 1].fecha; document.getElementById('contFechaFin').value = datosContenidoGlobal[0].fecha; }
+      renderizarVistaContenido(datosContenidoGlobal);
+    }
+
+    // MOTOR DE ORDENAMIENTO
+    function ordenarTabla(columna, conservarOrden = false) {
+      if (!conservarOrden) {
+        if (ordenColumna === columna) {
+          ordenAscendente = !ordenAscendente;
+        } else {
+          ordenColumna = columna;
+          ordenAscendente = false;
+        }
+      }
+
+      datosContenidoFiltrados.sort((a, b) => {
+        let valA = a[columna];
+        let valB = b[columna];
+        
+        if (columna === 'fecha') {
+          valA = new Date(a.fecha);
+          valB = new Date(b.fecha);
+        }
+
+        if (valA < valB) return ordenAscendente ? -1 : 1;
+        if (valA > valB) return ordenAscendente ? 1 : -1;
+        return 0;
+      });
+
+      poblarTabla(datosContenidoFiltrados);
+    }
+
+    function toggleVerTodo() { mostrandoTodo = !mostrandoTodo; poblarTabla(datosContenidoFiltrados); document.getElementById('btnVerMas').innerText = mostrandoTodo ? "Mostrar menos ↑" : "Ver todas las publicaciones ↓"; }
+
+    function poblarTabla(datos) {
+      const tbody = document.getElementById('tablaContenidoBody'); tbody.innerHTML = '';
+      let m = mostrandoTodo ? datos : datos.slice(0, 5);
+      document.getElementById('subInfoTabla').innerText = mostrandoTodo ? `Mostrando los ${datos.length} registros (Ordenado por: ${ordenColumna})` : `Mostrando las 5 publicaciones (Ordenado por: ${ordenColumna})`;
+      document.getElementById('contenedorBotonVerMas').className = datos.length > 5 ? "p-4 bg-gray-50 dark:bg-slate-800 text-center border-t border-gray-100 dark:border-slate-700 transition-colors duration-200" : "hidden";
+
+      m.forEach(row => {
+        let tr = document.createElement('tr'); tr.className = "hover:bg-gray-50/50 dark:hover:bg-slate-700/50 transition-colors duration-150";
+        let erTexto = row.er.toFixed(2) + '%';
+        let claseSemaforo = "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 border border-red-100 dark:border-red-800/50"; 
+		if (row.er >= 5) claseSemaforo = "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800/50"; 
+		else if (row.er >= 2.5) claseSemaforo = "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50";
+
+        tr.innerHTML = `
+          <td class="p-3 sm:p-4 font-medium text-lead-dark dark:text-white max-w-xs truncate"><a href="${row.link}" target="_blank" class="hover:text-lead-purple dark:hover:text-purple-400 underline">${row.descripcion}</a></td>
+          <td class="p-3 sm:p-4 text-gray-500 dark:text-slate-400 whitespace-nowrap">${row.fechaDisplay}</td>
+          <td class="p-3 sm:p-4 whitespace-nowrap"><span class="bg-purple-50 dark:bg-purple-900/40 text-lead-purple dark:text-purple-300 px-2 py-0.5 rounded text-[10px] font-semibold">${row.tipo}</span></td>
+          <td class="p-3 sm:p-4 font-semibold text-lead-dark dark:text-white whitespace-nowrap">${row.alcance.toLocaleString()}</td>
+          <td class="p-3 sm:p-4 text-center text-gray-600 dark:text-slate-300 whitespace-nowrap">${row.likes.toLocaleString()}</td>
+          <td class="p-3 sm:p-4 text-center text-gray-600 dark:text-slate-300 whitespace-nowrap">${row.comentarios.toLocaleString()}</td>
+          <td class="p-3 sm:p-4 text-center text-gray-600 dark:text-slate-300 whitespace-nowrap">${row.compartidos.toLocaleString()}</td>
+          <td class="p-3 sm:p-4 text-center text-gray-600 dark:text-slate-300 whitespace-nowrap">${row.guardados.toLocaleString()}</td>
+          <td class="p-3 sm:p-4 text-center text-gray-600 dark:text-slate-300 whitespace-nowrap">${row.seguimientos.toLocaleString()}</td>
+          <td class="p-3 sm:p-4 font-bold text-center whitespace-nowrap"><span class="px-2 py-1 rounded-md text-[11px] ${claseSemaforo}">${erTexto}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderizarVistaContenido(datos) {
+      if (chartMatriz) [chartMatriz, chartFormatoHorizontal, chartCruceVistas].forEach(c => c.destroy());
+
+      const tAlc = datos.reduce((a, b) => a + b.alcance, 0);
+      const tInt = datos.reduce((a, b) => a + b.interacciones, 0);
+      const tER = tAlc > 0 ? (tInt / tAlc) * 100 : 0;
+
+      let inicioStr = document.getElementById('contFechaInicio').value;
+      let finStr = document.getElementById('contFechaFin').value;
+      let tAlcPrev = 0, tIntPrev = 0, tERPrev = 0;
+
+      if (inicioStr && finStr) {
+        let dIni = new Date(inicioStr + "T00:00:00");
+        let dFin = new Date(finStr + "T00:00:00");
+        let diffDays = Math.ceil(Math.abs(dFin - dIni) / (1000 * 3600 * 24)) + 1;
+
+        let prevFin = new Date(dIni);
+        prevFin.setDate(prevFin.getDate() - 1);
+        let prevIni = new Date(prevFin);
+        prevIni.setDate(prevIni.getDate() - diffDays + 1);
+
+        let strPrevIni = prevIni.toISOString().split('T')[0];
+        let strPrevFin = prevFin.toISOString().split('T')[0];
+
+        let datosPrev = datosContenidoGlobal.filter(d => d.fecha >= strPrevIni && d.fecha <= strPrevFin);
+
+        tAlcPrev = datosPrev.reduce((a, b) => a + b.alcance, 0);
+        tIntPrev = datosPrev.reduce((a, b) => a + b.interacciones, 0);
+        tERPrev = tAlcPrev > 0 ? (tIntPrev / tAlcPrev) * 100 : 0;
+      }
+
+      let deltaAlc = calcularEstilosPoP(tAlc, tAlcPrev);
+      document.getElementById('deltaAlcance').innerText = deltaAlc.texto;
+      document.getElementById('deltaAlcance').className = `text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md transition-colors duration-200 ${deltaAlc.clase}`;
+
+      let deltaInt = calcularEstilosPoP(tInt, tIntPrev);
+      document.getElementById('deltaInteracciones').innerText = deltaInt.texto;
+      document.getElementById('deltaInteracciones').className = `text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md transition-colors duration-200 ${deltaInt.clase}`;
+
+      let deltaER = calcularEstilosPoP(tER, tERPrev);
+      document.getElementById('deltaER').innerText = deltaER.texto;
+      document.getElementById('deltaER').className = `text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md transition-colors duration-200 ${deltaER.clase}`;
+
+      document.getElementById('contKpiAlcance').innerText = tAlc.toLocaleString();
+      document.getElementById('contKpiInteracciones').innerText = tInt.toLocaleString();
+      document.getElementById('contKpiER').innerText = tER.toFixed(2) + '%';
+      document.getElementById('contadorPosts').innerText = datos.length + ' posts';
+
+      const top3 = [...datos].sort((a,b) => b.alcance - a.alcance).slice(0, 3);
+      const podiumDiv = document.getElementById('topPodiumVertical'); podiumDiv.innerHTML = '';
+      top3.forEach((p, i) => {
+        let card = document.createElement('div'); card.className = "bg-gray-50/50 dark:bg-slate-700/30 p-3 rounded-xl border border-gray-100 dark:border-slate-700 flex flex-col justify-between transition-colors duration-200";
+        card.innerHTML = `<div class="flex justify-between items-center mb-1"><span class="text-xs font-bold text-lead-purple dark:text-purple-400">${['🥇','🥈','🥉'][i]} Top ${i + 1} <span class="text-gray-400 dark:text-slate-400 font-normal">(${p.tipo})</span></span><span class="text-[10px] text-gray-500 dark:text-slate-300 font-bold">${p.alcance.toLocaleString()} alcance</span></div><p class="text-xs text-gray-600 dark:text-slate-300 font-medium line-clamp-1 mb-2">${p.descripcion}</p><div class="text-right"><a href="${p.link}" target="_blank" class="text-[11px] text-lead-purple dark:text-purple-400 font-semibold hover:underline">Ver publicación →</a></div>`;
+        podiumDiv.appendChild(card);
+      });
+
+      poblarTabla(datos);
+
+      const scatterData = datos.map(d => ({ x: d.alcance, y: d.interacciones, label: d.descripcion, tipo: d.tipo, er: d.er }));
+
+      chartMatriz = new Chart(document.getElementById('graficoMatrizImpacto').getContext('2d'), {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'Posts', data: scatterData,
+            backgroundColor: function(c) {
+              let t = c.raw?.tipo || '';
+              if (t.includes('Carrusel')) return 'rgba(128, 39, 172, 0.8)';
+              if (t.includes('Imagen')) return 'rgba(235, 66, 125, 0.8)';
+              if (t.includes('Reel')) return 'rgba(3, 16, 106, 0.8)';
+              return 'rgba(128, 39, 172, 0.8)';
+            },
+            pointRadius: function(c) { return Math.max(5, Math.min((c.raw?.er || 0) * 1.2, 25)); },
+            pointHoverRadius: function(c) { return Math.max(7, Math.min((c.raw?.er || 0) * 1.2, 25)) + 3; }
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, interaction: { mode: 'nearest', intersect: true },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              yAlign: 'bottom', backgroundColor: '#031346', titleFont: { family: 'Poppins', size: 11 }, bodyFont: { family: 'Inter', size: 11 }, padding: 12,
+              callbacks: {
+                title: function(c) { return `Formato: ${c[0].raw.tipo}`; },
+                label: function(c) {
+                  let t = c.raw.label.length > 40 ? c.raw.label.substring(0, 40) + '...' : c.raw.label;
+                  return [`Copy: "${t}"`, `Alcance: ${c.raw.x.toLocaleString()}`, `Interacciones: ${c.raw.y.toLocaleString()}`, `🔥 Engagement Rate: ${c.raw.er.toFixed(2)}%`];
+                }
+              }
+            }
+          },
+          scales: { 
+            x: { title: { display: true, text: 'Alcance' }, grid: { display: false } }, 
+            y: { title: { display: true, text: 'Interacciones' }, grid: { color: context => document.documentElement.classList.contains('dark') ? '#334155' : '#f3f4f6' } } 
+          }
+        }
+      });
+
+      let tAc = {}, tCo = {}; datos.forEach(d => { tAc[d.tipo] = (tAc[d.tipo]||0) + d.alcance; tCo[d.tipo] = (tCo[d.tipo]||0) + 1; });
+      chartFormatoHorizontal = new Chart(document.getElementById('graficoFormatoHorizontal').getContext('2d'), { type: 'bar', data: { labels: Object.keys(tAc), datasets: [{ label: 'Promedio', data: Object.keys(tAc).map(t => Math.round(tAc[t]/tCo[t])), backgroundColor: ['#8027AC','#EB427D','#03106A'], borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } } });
+
+      let topC = [...datos].sort((a,b) => b.visualizaciones - a.visualizaciones).slice(0, 6);
+      chartCruceVistas = new Chart(document.getElementById('graficoCruceVistas').getContext('2d'), { type: 'bar', data: { labels: topC.map(d => d.descripcion.substring(0,12)+'...'), datasets: [{ label: 'Vistas', data: topC.map(d => d.visualizaciones), backgroundColor: '#03106A', borderRadius: 3 }, { label: 'Interacc.', data: topC.map(d => d.interacciones), backgroundColor: '#EB427D', borderRadius: 3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { grid: { display: false } }, y: { grid: { color: context => document.documentElement.classList.contains('dark') ? '#334155' : '#f3f4f6' } } } } });
+    }
+
+    // ============================================================
+    // VISTA PÚBLICO
+    // ============================================================
+    let publicoCargado = false, chartPaises, chartCiudades, chartEdadSexo, chartPaginas;
+
+    function cargarVistaPublicoOnce() {
+      if (publicoCargado) return; publicoCargado = true;
+      renderizarVistaPublico(datosPublicoCache);
+    }
+
+    function renderizarVistaPublico(data) {
+      if (chartPaises) [chartPaises, chartCiudades, chartEdadSexo, chartPaginas].forEach(c => c.destroy());
+      chartPaises = new Chart(document.getElementById('graficoPaises').getContext('2d'), { type: 'bar', data: { labels: data.paises.map(d => d.nombre), datasets: [{ data: data.paises.map(d => d.valor), backgroundColor: '#8027AC', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } } });
+      chartCiudades = new Chart(document.getElementById('graficoCiudades').getContext('2d'), { type: 'bar', data: { labels: data.ciudades.map(d => d.nombre), datasets: [{ data: data.ciudades.map(d => d.valor), backgroundColor: '#EB427D', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } } });
+      chartEdadSexo = new Chart(document.getElementById('graficoEdadSexo').getContext('2d'), { type: 'bar', data: { labels: data.edadSexo.map(d => d.nombre), datasets: [{ label: 'Mujeres %', data: data.edadSexo.map(d => d.valor), backgroundColor: '#EB427D', borderRadius: 4 }, { label: 'Hombres %', data: data.edadSexo.map(d => d.valor2 || 0), backgroundColor: '#03106A', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { grid: { display: false } }, y: { grid: { color: context => document.documentElement.classList.contains('dark') ? '#334155' : '#f3f4f6' } } } } });
+      chartPaginas = new Chart(document.getElementById('graficoPaginas').getContext('2d'), { type: 'bar', data: { labels: data.paginas.map(d => d.nombre), datasets: [{ data: data.paginas.map(d => d.valor), backgroundColor: '#03106A', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } } });
+    }
+  </script>
+</body>
+</html>
