@@ -7,7 +7,8 @@
   
   <link rel="icon" type="image/png" href="image/lead_favicon.png">
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 
@@ -955,10 +956,17 @@
 
     function agregarMensaje(texto, esUsuario) {
       const div = document.createElement('div');
-      div.className = esUsuario 
-        ? "bg-lead-purple text-white p-3 rounded-xl rounded-tr-none self-end max-w-[85%] shadow-sm" 
-        : "bg-white dark:bg-slate-800 p-3 rounded-xl rounded-tl-none self-start max-w-[90%] shadow-sm border border-gray-100 dark:border-slate-700 text-gray-800 dark:text-gray-200 whitespace-pre-wrap text-sm";
-      div.innerHTML = texto.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Formatear negritas y saltos
+      
+      if (esUsuario) {
+        div.className = "bg-lead-purple text-white p-3 rounded-xl rounded-tr-none self-end max-w-[85%] shadow-sm text-sm";
+        div.innerText = texto; 
+      } else {
+        // Usamos las clases 'prose' de Tailwind para que el Markdown se estile automáticamente
+        div.className = "bg-white dark:bg-slate-800 p-3 rounded-xl rounded-tl-none self-start max-w-[95%] shadow-sm border border-gray-100 dark:border-slate-700 text-gray-800 dark:text-gray-200 prose prose-sm prose-p:leading-snug prose-li:my-0 dark:prose-invert overflow-hidden";
+        // Convertimos el Markdown de la IA a HTML real
+        div.innerHTML = marked.parse(texto);
+      }
+      
       mensajesChat.appendChild(div);
       mensajesChat.scrollTop = mensajesChat.scrollHeight;
     }
