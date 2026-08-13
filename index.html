@@ -413,7 +413,7 @@
               </div>
           </div>
 
-          <div class="px-3 py-2 flex gap-2 overflow-x-auto whitespace-nowrap text-xs border-t border-gray-100 dark:border-slate-700/50">
+          <div class="px-3 py-2 flex gap-2 overflow-x-auto [::-webkit-scrollbar]:hidden whitespace-nowrap text-xs border-t border-gray-100 dark:border-slate-700/50">
               <button class="prompt-sugerencia bg-purple-50 dark:bg-purple-900/30 text-lead-purple dark:text-purple-400 px-3 py-1.5 rounded-full border border-purple-100 dark:border-purple-800/50 hover:bg-purple-100 dark:hover:bg-purple-900/50 transition font-semibold">
                   📊 Top 3 mayor alcance
               </button>
@@ -958,12 +958,11 @@
       const div = document.createElement('div');
       
       if (esUsuario) {
-        div.className = "bg-lead-purple text-white p-3 rounded-xl rounded-tr-none self-end max-w-[85%] shadow-sm text-sm";
+        div.className = "bg-lead-purple text-white p-3 rounded-xl rounded-tr-none self-end max-w-[85%] shadow-sm text-sm break-words";
         div.innerText = texto; 
       } else {
-        // Usamos las clases 'prose' de Tailwind para que el Markdown se estile automáticamente
-        div.className = "bg-white dark:bg-slate-800 p-3 rounded-xl rounded-tl-none self-start max-w-[95%] shadow-sm border border-gray-100 dark:border-slate-700 text-gray-800 dark:text-gray-200 prose prose-sm prose-p:leading-snug prose-li:my-0 dark:prose-invert overflow-hidden";
-        // Convertimos el Markdown de la IA a HTML real
+        // prose-p:m-0 elimina los márgenes fantasma que recortaban el texto
+        div.className = "bg-white dark:bg-slate-800 p-3 rounded-xl rounded-tl-none self-start max-w-[90%] shadow-sm border border-gray-100 dark:border-slate-700 text-gray-800 dark:text-gray-200 prose prose-sm prose-p:m-0 prose-p:leading-normal prose-ul:my-1 prose-li:my-0 dark:prose-invert break-words";
         div.innerHTML = marked.parse(texto);
       }
       
