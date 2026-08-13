@@ -122,7 +122,7 @@
         </div>
         <div class="bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 border-l-4 border-l-lead-blue dark:border-l-blue-400 flex flex-col justify-between transition-colors duration-200">
           <div class="flex justify-between items-start gap-2">
-            <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-slate-400 font-semibold uppercase tracking-wider leading-tight">Visualizaciones</p>
+            <p class="text-[9px] sm:text-[10px] text-gray-400 dark:text-slate-400 font-semibold uppercase tracking-wider leading-tight">Vistas</p>
             <div class="flex flex-col items-end flex-shrink-0">
               <span id="deltaResVistas" class="text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-gray-50 text-gray-400">-</span>
               <span class="text-[7px] sm:text-[8px] text-gray-400 dark:text-slate-500 mt-1 uppercase font-semibold tracking-wide whitespace-nowrap">vs periodo ant.</span>
@@ -373,11 +373,64 @@
       <!-- Añadido el origen de los datos de Meta -->
       <p class="text-[10px] text-gray-400 dark:text-slate-500 font-medium text-center md:text-right">
         Datos obtenidos de Meta Business Suite.<br>
-        by mkt team<3
+        by mkt team
       </p>
       
     </div>
   </footer>
+
+  <!-- ========================================== -->
+  <!-- WIDGET CHATBOT IA (GLASSMORPHISM)          -->
+  <!-- ========================================== -->
+
+  <!-- Botón Flotante (FAB) -->
+  <button id="btn-chat-ia" class="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-lead-purple to-lead-pink text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 flex items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+  </button>
+
+  <!-- Ventana del Chat (Oculta por defecto) -->
+  <div id="ventana-chat-ia" class="fixed bottom-24 right-6 z-50 w-80 sm:w-96 hidden flex-col">
+      <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-white/40 dark:border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[450px]">
+          
+          <div class="bg-gradient-to-r from-lead-purple to-lead-pink p-4 text-white flex justify-between items-center shadow-md">
+              <div class="flex items-center gap-2">
+                  <span class="text-xl">✨</span>
+                  <h3 class="font-bold text-sm sm:text-base font-display tracking-wide">LEAD Analista IA</h3>
+              </div>
+              <button id="btn-cerrar-chat" class="hover:text-gray-200 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+              </button>
+          </div>
+
+          <div id="mensajes-chat" class="flex-1 p-4 overflow-y-auto flex flex-col gap-3 text-sm text-gray-800 dark:text-gray-200">
+              <div class="bg-white dark:bg-slate-800 p-3 rounded-xl rounded-tl-none self-start max-w-[85%] shadow-sm border border-gray-100 dark:border-slate-700">
+                  ¡Hola! Soy tu asistente de datos. ¿Qué quieres saber sobre el rendimiento de nuestro contenido?
+              </div>
+          </div>
+
+          <div class="px-3 py-2 flex gap-2 overflow-x-auto whitespace-nowrap text-xs border-t border-gray-100 dark:border-slate-700/50">
+              <button class="prompt-sugerencia bg-purple-50 dark:bg-purple-900/30 text-lead-purple dark:text-purple-400 px-3 py-1.5 rounded-full border border-purple-100 dark:border-purple-800/50 hover:bg-purple-100 dark:hover:bg-purple-900/50 transition font-semibold">
+                  📊 Top 3 mayor alcance
+              </button>
+              <button class="prompt-sugerencia bg-pink-50 dark:bg-pink-900/30 text-lead-pink dark:text-pink-400 px-3 py-1.5 rounded-full border border-pink-100 dark:border-pink-800/50 hover:bg-pink-100 dark:hover:bg-pink-900/50 transition font-semibold">
+                  🤔 ¿Qué formatos rinden más?
+              </button>
+          </div>
+
+          <div class="p-3 border-t border-gray-100 dark:border-slate-700/50 bg-gray-50/50 dark:bg-slate-800/50 flex gap-2">
+              <input type="text" id="input-chat" placeholder="Pregunta algo sobre la data..." class="flex-1 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg px-3 py-2 focus:outline-none focus:border-lead-purple text-sm dark:text-white placeholder-gray-400">
+              <button id="btn-enviar-chat" class="bg-lead-purple text-white p-2 rounded-lg hover:bg-purple-900 transition-colors shadow-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                  </svg>
+              </button>
+          </div>
+      </div>
+  </div>
 
   <script>
     function toggleDarkMode() {
@@ -875,5 +928,79 @@
       chartPaginas = new Chart(document.getElementById('graficoPaginas').getContext('2d'), { type: 'bar', data: { labels: data.paginas.map(d => d.nombre), datasets: [{ data: data.paginas.map(d => d.valor), backgroundColor: '#03106A', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } } });
     }
   </script>
+
+  <script>
+    // ==========================================
+    // LÓGICA DEL CHATBOT IA FRONTEND
+    // ==========================================
+    const btnChatIa = document.getElementById('btn-chat-ia');
+    const ventanaChatIa = document.getElementById('ventana-chat-ia');
+    const btnCerrarChat = document.getElementById('btn-cerrar-chat');
+    const inputChat = document.getElementById('input-chat');
+    const btnEnviarChat = document.getElementById('btn-enviar-chat');
+    const mensajesChat = document.getElementById('mensajes-chat');
+    const promptsSugerencia = document.querySelectorAll('.prompt-sugerencia');
+
+    // Controlar visibilidad
+    btnChatIa.addEventListener('click', () => {
+      ventanaChatIa.classList.toggle('hidden');
+      ventanaChatIa.classList.toggle('flex');
+      if(!ventanaChatIa.classList.contains('hidden')) inputChat.focus();
+    });
+
+    btnCerrarChat.addEventListener('click', () => {
+      ventanaChatIa.classList.add('hidden');
+      ventanaChatIa.classList.remove('flex');
+    });
+
+    function agregarMensaje(texto, esUsuario) {
+      const div = document.createElement('div');
+      div.className = esUsuario 
+        ? "bg-lead-purple text-white p-3 rounded-xl rounded-tr-none self-end max-w-[85%] shadow-sm" 
+        : "bg-white dark:bg-slate-800 p-3 rounded-xl rounded-tl-none self-start max-w-[90%] shadow-sm border border-gray-100 dark:border-slate-700 text-gray-800 dark:text-gray-200 whitespace-pre-wrap text-sm";
+      div.innerHTML = texto.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Formatear negritas y saltos
+      mensajesChat.appendChild(div);
+      mensajesChat.scrollTop = mensajesChat.scrollHeight;
+    }
+
+    async function enviarPreguntaIA(pregunta) {
+      if (!pregunta.trim()) return;
+      
+      agregarMensaje(pregunta, true);
+      inputChat.value = '';
+      
+      const idPensando = 'msg-pensando-' + Date.now();
+      const divPensando = document.createElement('div');
+      divPensando.id = idPensando;
+      divPensando.className = "bg-white dark:bg-slate-800 p-3 rounded-xl rounded-tl-none self-start shadow-sm border border-gray-100 dark:border-slate-700 text-gray-500 dark:text-gray-400 italic text-xs flex items-center gap-2";
+      divPensando.innerHTML = `<div class="animate-spin rounded-full h-3 w-3 border-b-2 border-lead-purple"></div> Analizando datos...`;
+      mensajesChat.appendChild(divPensando);
+      mensajesChat.scrollTop = mensajesChat.scrollHeight;
+
+      try {
+        // Hacemos el llamado a tu Apps Script con la acción 'chatIA'
+        const response = await fetch(APPS_SCRIPT_URL + '?action=chatIA&pregunta=' + encodeURIComponent(pregunta));
+        const data = await response.text(); 
+        
+        document.getElementById(idPensando).remove();
+        agregarMensaje(data, false);
+      } catch (error) {
+        document.getElementById(idPensando).remove();
+        agregarMensaje("❌ Error de conexión. El servidor de Google no respondió.", false);
+      }
+    }
+
+    btnEnviarChat.addEventListener('click', () => enviarPreguntaIA(inputChat.value));
+    inputChat.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') enviarPreguntaIA(inputChat.value);
+    });
+
+    promptsSugerencia.forEach(btn => {
+      btn.addEventListener('click', () => {
+        enviarPreguntaIA(btn.textContent.trim());
+      });
+    });
+  </script>
+
 </body>
 </html>
