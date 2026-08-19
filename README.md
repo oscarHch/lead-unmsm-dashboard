@@ -1,4 +1,4 @@
-# LEAD UNMSM - Analytics Dashboard & AI Assistant 📊🤖
+# LEAD UNMSM - Analytics Dashboard & AI Assistant 📊
 
 Un dashboard interactivo diseñado para visualizar, analizar y consultar las métricas de redes sociales (Meta Business Suite) de la comunidad estudiantil LEAD UNMSM. El proyecto incluye un asistente de inteligencia artificial integrado que responde preguntas sobre el rendimiento del contenido cruzando datos en tiempo real.
 
