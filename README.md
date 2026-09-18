@@ -5,7 +5,7 @@ Un dashboard interactivo diseñado para visualizar, analizar y consultar las mé
 ## 🚀 Características Principales
 
 *   **Visualización de Datos:** Gráficos dinámicos (líneas, barras, dispersión) que muestran métricas clave como Alcance, Engagement Rate, Embudo de Conversión y Demografía.
-*   **Asistente IA Integrado:** Un chatbot flotante estilo *glassmorphism* capaz de responder consultas complejas en lenguaje natural basándose estrictamente en los datos del dashboard.
+*   **Asistente IA Integrado:** Un chatbot flotante capaz de responder consultas complejas en lenguaje natural basándose estrictamente en los datos del dashboard.
 *   **Interfaz Responsiva & Modo Oscuro:** Construido con Tailwind CSS, adaptándose a cualquier dispositivo y permitiendo alternar entre temas claro/oscuro.
 *   **Tabla de Contenido Dinámica:** Registro detallado de publicaciones con funciones de ordenamiento (sort) por métricas individuales.
 *   **Redimensión Personalizada:** El widget del chat incluye lógica nativa en JavaScript para redimensionar su altura hacia arriba con el cursor, sin dependencias externas.

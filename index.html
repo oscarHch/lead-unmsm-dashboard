@@ -792,35 +792,22 @@
 
     function toggleVerTodo() { mostrandoTodo = !mostrandoTodo; poblarTabla(datosContenidoFiltrados); document.getElementById('btnVerMas').innerText = mostrandoTodo ? "Mostrar menos ↑" : "Ver todas las publicaciones ↓"; }
 
-    // Percentil sobre un arreglo de números (interpolación lineal, método estándar).
-    function calcularPercentil(valores, p) {
-      if (!valores.length) return 0;
-      const ordenado = [...valores].sort((a, b) => a - b);
-      const idx = (p / 100) * (ordenado.length - 1);
-      const inf = Math.floor(idx), sup = Math.ceil(idx);
-      if (inf === sup) return ordenado[inf];
-      return ordenado[inf] + (ordenado[sup] - ordenado[inf]) * (idx - inf);
-    }
-
     function poblarTabla(datos) {
       const tbody = document.getElementById('tablaContenidoBody'); tbody.innerHTML = '';
       let m = mostrandoTodo ? datos : datos.slice(0, 5);
       document.getElementById('subInfoTabla').innerText = mostrandoTodo ? `Mostrando los ${datos.length} registros (Ordenado por: ${ordenColumna})` : `Mostrando las 5 publicaciones (Ordenado por: ${ordenColumna})`;
       document.getElementById('contenedorBotonVerMas').className = datos.length > 5 ? "p-4 bg-gray-50 dark:bg-slate-800 text-center border-t border-gray-100 dark:border-slate-700 transition-colors duration-200" : "hidden";
 
-      // Semáforo RELATIVO al propio historial de la cuenta (terciles), no a un % fijo.
-      // Así el corte se adapta solo si la cuenta mejora o empeora con el tiempo,
-      // en vez de compararse contra un benchmark genérico de Instagram.
-      const todosER = datos.map(r => r.er);
-      const corteVerde = calcularPercentil(todosER, 66);   // Top tercio: mejor rendimiento propio
-      const corteAmbar = calcularPercentil(todosER, 33);   // Tercio medio
+      // Semáforo con umbrales FIJOS — ajusta estos dos números cuando quieras recalibrar.
+      const CORTE_VERDE = 8;    // ER >= 8%  -> verde
+      const CORTE_AMBAR = 5;  // ER >= 5% (y < 8%) -> naranja
 
       m.forEach(row => {
         let tr = document.createElement('tr'); tr.className = "hover:bg-gray-50/50 dark:hover:bg-slate-700/50 transition-colors duration-150";
         let erTexto = row.er.toFixed(2) + '%';
         let claseSemaforo = "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 border border-red-100 dark:border-red-800/50";
-        if (row.er >= corteVerde) claseSemaforo = "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800/50";
-        else if (row.er >= corteAmbar) claseSemaforo = "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50";
+        if (row.er >= CORTE_VERDE) claseSemaforo = "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800/50";
+        else if (row.er >= CORTE_AMBAR) claseSemaforo = "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50";
 
         tr.innerHTML = `
           <td class="p-3 sm:p-4 font-medium text-lead-dark dark:text-white max-w-xs truncate"><a href="${row.link}" target="_blank" class="hover:text-lead-purple dark:hover:text-purple-400 underline">${row.descripcion}</a></td>
@@ -832,7 +819,7 @@
           <td class="p-3 sm:p-4 text-center text-gray-600 dark:text-slate-300 whitespace-nowrap">${row.compartidos.toLocaleString()}</td>
           <td class="p-3 sm:p-4 text-center text-gray-600 dark:text-slate-300 whitespace-nowrap">${row.guardados.toLocaleString()}</td>
           <td class="p-3 sm:p-4 text-center text-gray-600 dark:text-slate-300 whitespace-nowrap">${row.seguimientos.toLocaleString()}</td>
-          <td class="p-3 sm:p-4 font-bold text-center whitespace-nowrap"><span class="px-2 py-1 rounded-full text-[11px] ${claseSemaforo}" title="Comparado con el tercio superior/inferior de tus propias publicaciones en este rango">${erTexto}</span></td>
+          <td class="p-3 sm:p-4 font-bold text-center whitespace-nowrap"><span class="px-2 py-1 rounded-full text-[11px] ${claseSemaforo}" title="ER fijo: verde ≥8%, naranja ≥5%, rojo <5%">${erTexto}</span></td>
         `;
         tbody.appendChild(tr);
       });
